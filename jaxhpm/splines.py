@@ -3,7 +3,7 @@ import jax.numpy as jnp
 
 from flax import nnx
 
-from jaxpm.utils import BaseModel
+from jaxhpm.utils import BaseModel
 
 
 def _deBoorVectorized(x, knot_positions, control_points, degree):

@@ -39,11 +39,11 @@ import jax.numpy as jnp
 from flax import nnx
 import optax
 
-import jaxpm
-from jaxpm import camels, training, objectives, diagnostics
-from jaxpm.painting import cic_paint, cic_read
-from jaxpm.nn import MLP, ConditionedCNN
-from jaxpm.objectives import ParticleLoss, FieldLoss
+import jaxhpm
+from jaxhpm import camels, training, objectives, diagnostics
+from jaxhpm.painting import cic_paint, cic_read
+from jaxhpm.nn import MLP, ConditionedCNN
+from jaxhpm.objectives import ParticleLoss, FieldLoss
 
 vcic_paint = jax.vmap(cic_paint, in_axes=(None, 0, None))
 vcic_read = jax.vmap(cic_read, in_axes=(0, 0))
@@ -462,9 +462,9 @@ if __name__ == "__main__":
             )
 
             if with_latent:
-                if isinstance(pressure_model, jaxpm.nn.MLP):
+                if isinstance(pressure_model, jaxhpm.nn.MLP):
                     y0 += (jnp.ones((parts_per_dim**3, 1)),)
-                elif isinstance(pressure_model, jaxpm.nn.ConditionedCNN):
+                elif isinstance(pressure_model, jaxhpm.nn.ConditionedCNN):
                     y0 += (jnp.ones(mesh_shape + [1]),)
                 else:
                     raise NotImplementedError

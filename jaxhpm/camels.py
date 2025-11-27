@@ -45,11 +45,12 @@ def load_CV_snapshots(
     SIM = os.path.join(CAMELS, "Sims", RUN)
     CAT = os.path.join(CAMELS, "FOF_Subfind", RUN)
 
+    snapshot_suffix = "" if i_snapshots is None else f',i=[{",".join(map(str, i_snapshots))}]'
     h5_FILE = os.path.join(
         CAMELS,
         "h5",
         RUN,
-        f"parts={parts_per_dim},mesh={mesh_per_dim}{'' if i_snapshots is None else f',i={i_snapshots}'}.h5",
+        f"parts={parts_per_dim},mesh={mesh_per_dim}{snapshot_suffix}.h5",
     )
     if not force_h5 and os.path.exists(h5_FILE):
         snapshot_dict = _h5_to_dict(h5_FILE)

@@ -5,7 +5,6 @@ from jax_cosmo import Cosmology
 
 from jaxhpm.kernels import fftk, gradient_kernel, invlaplace_kernel, invnabla_kernel, longrange_kernel, gaussian_kernel
 from jaxhpm.painting import cic_paint, cic_read
-from jaxhpm.graph import get_graph_given_edges, get_graph_from_features
 from jaxhpm.data import get_hpm_inputs
 from jaxhpm.nn import MLP, ConditionedCNN
 

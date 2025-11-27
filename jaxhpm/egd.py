@@ -4,8 +4,8 @@ import jax
 import jax.numpy as jnp
 import optax
 
-from jaxpm.painting import cic_read, cic_paint
-from jaxpm.kernels import fftk, gaussian_kernel, gradient_kernel
+from jaxhpm.painting import cic_read, cic_paint
+from jaxhpm.kernels import fftk, gaussian_kernel, gradient_kernel
 
 
 def apply_egd_correction(params, dmo_dm_pos, cosmo, mesh_shape):

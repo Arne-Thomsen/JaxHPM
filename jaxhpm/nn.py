@@ -36,7 +36,7 @@ class MLP(BaseModel):
         super().__init__()
 
         self.linear_in = nnx.Linear(d_in, d_hidden, rngs=rngs)
-        self.linear_hid = [nnx.Linear(d_hidden, d_hidden, rngs=rngs) for _ in range(n_hidden)]
+        self.linear_hid = nnx.List([nnx.Linear(d_hidden, d_hidden, rngs=rngs) for _ in range(n_hidden)])
         self.linear_out = nnx.Linear(d_hidden, d_out, rngs=rngs)
         self.activation = activation
         self.dropout_rate = dropout_rate
@@ -60,14 +60,14 @@ class MLP(BaseModel):
                 raise ValueError(f"Unsupported activation function: {self.activation}")
 
         if self.dropout_rate > 0:
-            self.dropout = [nnx.Dropout(dropout_rate, rngs=rngs) for _ in range(n_hidden)]
+            self.dropout = nnx.List([nnx.Dropout(dropout_rate, rngs=rngs) for _ in range(n_hidden)])
 
         if self.norm_type == "layer":
             self.norm_in = nnx.LayerNorm(d_hidden, rngs=rngs)
-            self.norm_hid = [nnx.LayerNorm(d_hidden, rngs=rngs) for _ in range(n_hidden)]
+            self.norm_hid = nnx.List([nnx.LayerNorm(d_hidden, rngs=rngs) for _ in range(n_hidden)])
         elif self.norm_type == "batch":
             self.norm_in = nnx.BatchNorm(d_hidden, rngs=rngs)
-            self.norm_hid = [nnx.BatchNorm(d_hidden, rngs=rngs) for _ in range(n_hidden)]
+            self.norm_hid = nnx.List([nnx.BatchNorm(d_hidden, rngs=rngs) for _ in range(n_hidden)])
 
         self.d_out = d_out
 
@@ -120,17 +120,17 @@ class ConditionedCNN(BaseModel):
 
         # CNN
         self.conv_in = nnx.Conv(d_in, d_hidden, kernel_size, padding="CIRCULAR", rngs=rngs)
-        self.conv_hidden = [
+        self.conv_hidden = nnx.List([
             nnx.Conv(d_hidden, d_hidden, kernel_size, padding="CIRCULAR", rngs=rngs) for _ in range(n_hidden)
-        ]
+        ])
         self.conv_out = nnx.Conv(d_hidden, d_out, kernel_size, padding="CIRCULAR", rngs=rngs)
 
         if self.norm_type == "layer":
             self.norm_in = nnx.LayerNorm(d_hidden, rngs=rngs)
-            self.norm_hidden = [nnx.LayerNorm(d_hidden, rngs=rngs) for _ in range(n_hidden)]
+            self.norm_hidden = nnx.List([nnx.LayerNorm(d_hidden, rngs=rngs) for _ in range(n_hidden)])
         elif self.norm_type == "batch":
             self.norm_in = nnx.BatchNorm(d_hidden, rngs=rngs)
-            self.norm_hidden = [nnx.BatchNorm(d_hidden, rngs=rngs) for _ in range(n_hidden)]
+            self.norm_hidden = nnx.List([nnx.BatchNorm(d_hidden, rngs=rngs) for _ in range(n_hidden)])
         elif self.norm_type == "group":
             # Choose a reasonable default number of groups for 3D CNNs
             def _pick_groups(c: int, desired: int = 32) -> int:
@@ -145,15 +145,15 @@ class ConditionedCNN(BaseModel):
             # Works for both (H, W, D, C) and (B, H, W, D, C)
             reduction_axes = (-4, -3, -2)
             self.norm_in = nnx.GroupNorm(d_hidden, num_groups=gn_groups, reduction_axes=reduction_axes, rngs=rngs)
-            self.norm_hidden = [
+            self.norm_hidden = nnx.List([
                 nnx.GroupNorm(d_hidden, num_groups=gn_groups, reduction_axes=reduction_axes, rngs=rngs)
                 for _ in range(n_hidden)
-            ]
+            ])
 
         # scale conditioning https://arxiv.org/abs/1709.07871
         self.scale_embed = nnx.Linear(1, d_hidden, rngs=rngs)
-        self.film_gamma = [nnx.Linear(d_hidden, d_hidden, rngs=rngs) for _ in range(n_hidden)]
-        self.film_beta = [nnx.Linear(d_hidden, d_hidden, rngs=rngs) for _ in range(n_hidden)]
+        self.film_gamma = nnx.List([nnx.Linear(d_hidden, d_hidden, rngs=rngs) for _ in range(n_hidden)])
+        self.film_beta = nnx.List([nnx.Linear(d_hidden, d_hidden, rngs=rngs) for _ in range(n_hidden)])
 
     def __call__(self, x, scale, training=False):
         """Forward pass through the conditioned CNN.

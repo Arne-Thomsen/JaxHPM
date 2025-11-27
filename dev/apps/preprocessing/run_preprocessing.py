@@ -4,7 +4,7 @@ os.environ["JAX_PLATFORMS"] = "cpu"
 os.environ["JAX_PLATFORMS_NAME"] = "cpu"
 
 from tqdm import tqdm
-from jaxpm import camels, data
+from jaxhpm import camels, data
 
 
 def resources(args):
