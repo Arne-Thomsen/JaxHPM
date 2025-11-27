@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jaxhpm"
+version = "0.0.1"
+description = "Hybrid physical-neural extension to JaxPM for effective gas dynamics"
+authors = [
+    {name = "Arne Thomsen"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "numpy",
+    "scipy",
+    "jax_cosmo",
+    "diffrax",
+    "flax",
+    "optax",
+    "orbax",
+    "h5py",
+    "hdf5plugin",
+    "tqdm",
+    "matplotlib",
+    "seaborn",
+    "ipykernel",
+]
+
+[project.optional-dependencies]
+jax = ["jax"]
+all = ["jax"]
+
+[project.urls]
+Homepage = "https://github.com/Arne-Thomsen/JaxHPM"
+
+[tool.setuptools]
+packages = ["jaxhpm"]
